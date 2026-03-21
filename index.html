@@ -338,9 +338,14 @@
     grid-template-columns: 40px 1fr;
     align-items: flex-start;
     margin-bottom: 2.5rem;
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .timeline-item.animate-ready {
     opacity: 0;
     transform: translateX(-20px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
   }
 
   .timeline-item.visible { opacity: 1; transform: translateX(0); }
@@ -818,16 +823,20 @@
   });
 
   const items = document.querySelectorAll('.timeline-item');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const delay = parseInt(entry.target.dataset.delay) || 0;
-        setTimeout(() => entry.target.classList.add('visible'), delay);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.15 });
-  items.forEach(item => observer.observe(item));
+
+  if ('IntersectionObserver' in window) {
+    items.forEach(item => item.classList.add('animate-ready'));
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const delay = parseInt(entry.target.dataset.delay) || 0;
+          setTimeout(() => entry.target.classList.add('visible'), delay);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    items.forEach(item => observer.observe(item));
+  }
 
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListen
