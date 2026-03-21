@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>bait.name — XSOAR Solutions</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap');
+
+  :root {
+    --bg: #080b0f;
+    --surface: #0d1117;
+    --border: #1e2a38;
+    --accent: #00e5ff;
+    --accent2: #ff6b35;
+    --text: #c9d1d9;
+    --muted: #4a5568;
+    --white: #f0f6fc;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* SCANLINE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,229,255,0.015) 2px, rgba(0,229,255,0.015) 4px);
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 4rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(8,11,15,0.9);
+    backdrop-filter: blur(12px);
+  }
+
+  .logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.1rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+  }
+
+  .logo span { color: var(--accent2); }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2.5rem;
+  }
+
+  nav ul a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  nav ul a:hover { color: var(--accent); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 8rem 4rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 60% at 60% 40%, black 0%, transparent 100%);
+  }
+
+  .hero-glow {
+    position: absolute;
+    right: -10%;
+    top: 20%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(0,229,255,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    max-width: 700px;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(0,229,255,0.3);
+    padding: 0.4rem 1rem;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease forwards;
+  }
+
+  .hero-tag::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  h1 {
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1.05;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+
+  h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 520px;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .cta-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    padding: 0.9rem 2rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+    font-weight: 700;
+  }
+
+  .btn-primary:hover { background: #33eaff; transform: translateY(-2px); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid rgba(0,229,255,0.4);
+    padding: 0.9rem 2rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+  }
+
+  .btn-outline:hover { border-color: var(--accent); background: rgba(0,229,255,0.05); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 6rem 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.8rem;
+  }
+
+  h2 {
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 800;
+    color: var(--white);
+    margin-bottom: 1rem;
+  }
+
+  .section-intro {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 600px;
+    margin-bottom: 3rem;
+  }
+
+  /* SERVICES GRID */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .service-card {
+    border: 1px solid var(--border);
+    padding: 2rem;
+    background: var(--surface);
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+    cursor: default;
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .service-card:hover {
+    border-color: rgba(0,229,255,0.3);
+    transform: translateY(-3px);
+  }
+
+  .service-card:hover::before { opacity: 1; }
+
+  .service-icon {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+  }
+
+  .service-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 0.6rem;
+    letter-spacing: 0.02em;
+  }
+
+  .service-card p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* TIMELINE */
+  .timeline-wrap {
+    position: relative;
+    padding: 1rem 0;
+  }
+
+  .timeline-track {
+    position: absolute;
+    left: 140px;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(180deg, var(--accent), var(--accent2), transparent);
+  }
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 120px 60px 1fr;
+    align-items: flex-start;
+    gap: 0;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .timeline-item.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .phase-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-align: right;
+    padding-top: 0.15rem;
+    padding-right: 1.5rem;
+    white-space: nowrap;
+  }
+
+  .timeline-node {
+    display: flex;
+    justify-content: center;
+    padding-top: 0.2rem;
+  }
+
+  .node-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    background: var(--bg);
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+  }
+
+  .node-dot.accent2 { border-color: var(--accent2); }
+
+  .timeline-content {
+    padding-left: 1.5rem;
+  }
+
+  .timeline-content h4 {
+    color: var(--white);
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+  }
+
+  .timeline-content p {
+    color: var(--muted);
+    font-size: 0.8rem;
+    line-height: 1.6;
+  }
+
+  .timeline-duration {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--accent);
+    border: 1px solid rgba(0,229,255,0.25);
+    padding: 0.15rem 0.5rem;
+    margin-top: 0.5rem;
+    letter-spacing: 0.1em;
+  }
+
+  .must-note {
+    border-left: 3px solid var(--accent2);
+    padding: 1rem 1.5rem;
+    background: rgba(255,107,53,0.05);
+    margin-top: 3rem;
+    font-size: 0.85rem;
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  .must-note strong { color: var(--accent2); }
+
+  /* WHY ME */
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .pillar {
+    border-top: 2px solid var(--border);
+    padding-top: 1.5rem;
+    transition: border-color 0.3s;
+  }
+
+  .pillar:hover { border-color: var(--accent); }
+
+  .pillar-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 2rem;
+    font-weight: 700;
+    color: rgba(0,229,255,0.2);
+    margin-bottom: 0.5rem;
+  }
+
+  .pillar h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+
+  .pillar p {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* CONTACT */
+  .contact-block {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    padding: 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .contact-block h2 { margin-bottom: 0.5rem; }
+
+  .contact-block .section-intro { margin-bottom: 1.5rem; }
+
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text);
+    text-decoration: none;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+
+  .contact-link:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,229,255,0.04);
+  }
+
+  .contact-link .icon { font-size: 1rem; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0 4rem;
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    nav ul { display: none; }
+    .hero { padding: 7rem 1.5rem 3rem; }
+    section { padding: 4rem 1.5rem; }
+    .timeline-track { left: 80px; }
+    .timeline-item { grid-template-columns: 60px 40px 1fr; }
+    .contact-block { grid-template-columns: 1fr; }
+    footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; }
+    .divider { margin: 0 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">bait<span>.</span>name</div>
+  <ul>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#timeline">Timeline</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-tag">XSOAR Specialist · Cyber Security</div>
+    <h1>Security<br>Orchestration,<br><em>Delivered.</em></h1>
+    <p class="hero-sub">End-to-end XSOAR solutions built directly on your tenant. From integrations to playbooks, I design and deploy complete SOAR architectures that actually work.</p>
+    <div class="cta-row">
+      <a href="#services" class="btn-primary">Explore Services</a>
+      <a href="#contact" class="btn-outline">Get in Touch</a>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-label">// What I Build</div>
+  <h2>Full-Spectrum<br>XSOAR Development</h2>
+  <p class="section-intro">Every engagement delivers production-ready, documented solutions tailored to your security operations environment.</p>
+
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">🔌</div>
+      <h3>Integration Development</h3>
+      <p>Custom integrations connecting your existing security stack — SIEMs, ticketing systems, threat intel feeds, and proprietary tools.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🏷️</div>
+      <h3>Classifications & Mapping</h3>
+      <p>Precise event classification rules and field mapping to ensure your incidents surface the right context, every time.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">⚙️</div>
+      <h3>Pre-Processing Rules</h3>
+      <p>Intelligent pre-processing pipelines that filter noise, enrich events, and route alerts before they reach your analysts.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🎭</div>
+      <h3>Playbook Development</h3>
+      <p>Automated response playbooks covering investigation, enrichment, containment, and remediation workflows — built for your threat model.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📋</div>
+      <h3>Incident & Object Design</h3>
+      <p>Custom incident types, fields, layouts, and supporting objects crafted to match your SOC's operational workflow.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📊</div>
+      <h3>Dashboards & Reports</h3>
+      <p>Tailored dashboards and automated reports giving leadership and analysts the visibility they need, in the format they want.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- TIMELINE -->
+<section id="timeline">
+  <div class="section-label">// Engagement Process</div>
+  <h2>Project Timeline</h2>
+  <p class="section-intro">A predictable, structured delivery process. Each phase builds on the last — no surprises, no scope creep.</p>
+
+  <div class="timeline-wrap">
+    <div class="timeline-track"></div>
+
+    <div class="timeline-item" data-delay="0">
+      <div class="phase-label">Phase 1</div>
+      <div class="timeline-node"><div class="node-dot"></div></div>
+      <div class="timeline-content">
+        <h4>Discovery & Scoping</h4>
+        <p>Deep-dive into your environment, existing tools, integrations, and security use cases. Define project scope, deliverables, and access requirements for your XSOAR development tenant.</p>
+        <span class="timeline-duration">1–2 WEEKS</span>
+      </div>
+    </div>
+
+    <div class="timeline-item" data-delay="100">
+      <div class="phase-label">Phase 2</div>
+      <div class="timeline-node"><div class="node-dot"></div></div>
+      <div class="timeline-content">
+        <h4>Integration Development</h4>
+        <p>Build and test all required third-party and custom integrations on your tenant. Each integration is documented and validated against your environment.</p>
+        <span class="timeline-duration">2–4 WEEKS</span>
+      </div>
+    </div>
+
+    <div class="timeline-item" data-delay="200">
+      <div class="phase-label">Phase 3</div>
+      <div class="timeline-node"><div class="node-dot"></div></div>
+      <div class="timeline-content">
+        <h4>Classifications Development</h4>
+        <p>Create and refine classification rules to accurately categorise incoming events and alerts according to your taxonomy.</p>
+        <span class="timeline-duration">1–2 WEEKS</span>
+      </div>
+    </div>
+
+    <div class="timeline-item" data-delay="300">
+      <div class="phase-label">Phase 4</div>
+      <div class="timeline-node"><div class="node-dot"></div></div>
+      <div class="timeline-content">
+        <h4>Mapping Development</h4>
+        <p>Field mapping across all data sources, ensuring consistent incident structure and enabling cross-source correlation.</p>
+        <span class="timeline-duration">1–2 WEEKS</span>
+      </div>
+    </div>
+
+    <div class="timeline-item" data-delay="400">
+      <div class="phase-label">Phase 5</div>
+      <div class="timeline-node"><div class="node-dot"></div></div>
+      <div class="timeline-content">
+        <h4>Pre-Processing Rules</h4>
+        <p>Design pre-processing pipelines to filter, enrich, and route events intelligently before incident creation — reducing noise from day one.</p>
+        <span class="timeline-duration">1–2 WEEKS</span>
+      </div>
+    </div>
+
+    <div class="timeline-item" data-delay="500">
+      <div class="phase-label">Phase 6</div>
+      <div class="timeline-node"><div class="node-dot accent2"></div></div>
+      <div class="timeline-content">
+        <h4>Incident & Object Development</h4>
+        <p>Custom incident types, layouts, fields, lists, and supporting XSOAR objects built to your operational requirements.</p>
+        <span class="timeline-duration">2–3 WEEKS</span>
+      </div>
+    </div>
+
+    <div class="timeline-item" data-delay="600">
+      <div class="phase-label">Phase 7</div>
+      <div class="timeline-node"><div class="node-dot accent2"></div></div>
+      <div class="timeline-content">
+        <h4>Playbook Development</h4>
+        <p>Automated response playbooks — from triage to full remediation. Built, tested, and refined iteratively with your team's input.</p>
+        <span class="timeline-duration">3–6 WEEKS</span>
+      </div>
+    </div>
+
+    <div class="timeline-item" data-delay="700">
+      <div class="phase-label">Phase 8</div>
+      <div class="timeline-node"><div class="node-dot accent2"></div></div>
+      <div class="timeline-content">
+        <h4>Dashboards & Reports</h4>
+        <p>Custom dashboards for analysts and leadership. Scheduled reports and ad-hoc views aligned to your KPIs and compliance requirements.</p>
+        <span class="timeline-duration">1–2 WEEKS</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="must-note">
+    <strong>Important:</strong> All development is performed exclusively on the <strong>client's own XSOAR development tenant</strong>. I do not operate a shared or personal tenant. This ensures your data never leaves your environment, all work is immediately visible to your team, and delivery is done in situ with no migration overhead.
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">// Why Work With Me</div>
+  <h2>Specialist Expertise,<br>Zero Overhead</h2>
+  <div class="pillars">
+    <div class="pillar">
+      <div class="pillar-num">01</div>
+      <h3>Pure XSOAR Focus</h3>
+      <p>Not a generalist consultancy. Every engagement is rooted in deep XSOAR platform knowledge built across real-world deployments.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-num">02</div>
+      <h3>Your Tenant, Your Control</h3>
+      <p>All work happens on your infrastructure. You retain full ownership, visibility, and control throughout the entire engagement.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-num">03</div>
+      <h3>End-to-End Delivery</h3>
+      <p>From initial discovery through to production-ready playbooks — a single expert who understands your full environment.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-num">04</div>
+      <h3>Security-First Mindset</h3>
+      <p>Built on a foundation of Cyber Security expertise. Every design decision considers threat coverage, resilience, and operational reality.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-block">
+    <div>
+      <div class="section-label">// Get Started</div>
+      <h2>Ready to Build?</h2>
+      <p class="section-intro">Whether you're starting from scratch or enhancing an existing XSOAR deployment, let's scope what's needed.</p>
+      <a href="#contact" class="btn-primary">Start the Conversation</a>
+    </div>
+    <div class="contact-links">
+      <a href="mailto:hello@bait.name" class="contact-link">
+        <span class="icon">✉️</span> hello@bait.name
+      </a>
+      <a href="https://linkedin.com" class="contact-link" target="_blank">
+        <span class="icon">💼</span> LinkedIn Profile
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 bait.name</span>
+  <span>XSOAR SOLUTIONS · CYBER SECURITY</span>
+</footer>
+
+<script>
+  // Animate timeline items on scroll
+  const items = document.querySelectorAll('.timeline-item');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const delay = parseInt(entry.target.dataset.delay) || 0;
+        setTimeout(() => entry.target.classList.add('visible'), delay);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  items.forEach(item => observer.observe(item));
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>
