@@ -27,7 +27,6 @@
     overflow-x: hidden;
   }
 
-  /* SCANLINE OVERLAY */
   body::before {
     content: '';
     position: fixed;
@@ -37,7 +36,6 @@
     z-index: 9999;
   }
 
-  /* NAV */
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -77,7 +75,6 @@
 
   nav ul a:hover { color: var(--accent); }
 
-  /* HERO */
   .hero {
     min-height: 100vh;
     display: flex;
@@ -112,40 +109,12 @@
     max-width: 700px;
   }
 
-  .hero-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--accent);
-    border: 1px solid rgba(0,229,255,0.3);
-    padding: 0.4rem 1rem;
-    margin-bottom: 2rem;
-    animation: fadeUp 0.8s ease forwards;
-  }
-
-  .hero-tag::before {
-    content: '';
-    width: 6px; height: 6px;
-    background: var(--accent);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
-
   h1 {
     font-size: clamp(2.8rem, 6vw, 5rem);
     font-weight: 800;
     color: var(--white);
     line-height: 1.05;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.2rem;
     animation: fadeUp 0.8s 0.1s ease both;
   }
 
@@ -154,20 +123,39 @@
     color: var(--accent);
   }
 
+  /* OPTION C — subtle divider + tag under hero title */
+  .hero-divider {
+    width: 40px;
+    height: 1px;
+    background: var(--border);
+    margin: 0 0 0.9rem;
+    animation: fadeUp 0.8s 0.18s ease both;
+  }
+
+  .hero-specialist-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.4rem;
+    animation: fadeUp 0.8s 0.22s ease both;
+  }
+
   .hero-sub {
     font-size: 1.1rem;
     color: var(--muted);
     line-height: 1.7;
     max-width: 520px;
     margin-bottom: 2.5rem;
-    animation: fadeUp 0.8s 0.2s ease both;
+    animation: fadeUp 0.8s 0.28s ease both;
   }
 
   .cta-row {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
-    animation: fadeUp 0.8s 0.3s ease both;
+    animation: fadeUp 0.8s 0.36s ease both;
   }
 
   .btn-primary {
@@ -208,7 +196,6 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* SECTIONS */
   section {
     padding: 6rem 4rem;
     max-width: 1200px;
@@ -239,7 +226,6 @@
     margin-bottom: 3rem;
   }
 
-  /* SERVICES GRID */
   .services-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -292,7 +278,6 @@
     line-height: 1.6;
   }
 
-  /* TIMELINE */
   .timeline-wrap {
     position: relative;
     padding: 1rem 0;
@@ -391,7 +376,6 @@
 
   .must-note strong { color: var(--accent2); }
 
-  /* WHY ME */
   .pillars {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -428,7 +412,6 @@
     line-height: 1.6;
   }
 
-  /* CONTACT */
   .contact-block {
     border: 1px solid var(--border);
     background: var(--surface);
@@ -440,7 +423,6 @@
   }
 
   .contact-block h2 { margin-bottom: 0.5rem; }
-
   .contact-block .section-intro { margin-bottom: 1.5rem; }
 
   .contact-links {
@@ -470,7 +452,7 @@
 
   .contact-link .icon { font-size: 1rem; }
 
-  /* FOOTER */
+  /* OPTION B — footer tagline */
   footer {
     border-top: 1px solid var(--border);
     padding: 2rem 4rem;
@@ -483,7 +465,12 @@
     letter-spacing: 0.1em;
   }
 
-  /* DIVIDER */
+  .footer-tagline {
+    color: var(--accent);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
   .divider {
     border: none;
     border-top: 1px solid var(--border);
@@ -498,7 +485,7 @@
     .timeline-track { left: 80px; }
     .timeline-item { grid-template-columns: 60px 40px 1fr; }
     .contact-block { grid-template-columns: 1fr; }
-    footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; }
+    footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
     .divider { margin: 0 1.5rem; }
   }
 </style>
@@ -520,8 +507,10 @@
   <div class="hero-grid"></div>
   <div class="hero-glow"></div>
   <div class="hero-content">
-    <div class="hero-tag">XSOAR Specialist · Cyber Security</div>
     <h1>Security<br>Orchestration,<br><em>Delivered.</em></h1>
+    <!-- OPTION C: divider + specialist tag -->
+    <div class="hero-divider"></div>
+    <div class="hero-specialist-tag">XSOAR Specialist · Cyber Security</div>
     <p class="hero-sub">End-to-end XSOAR solutions built directly on your tenant. From integrations to playbooks, I design and deploy complete SOAR architectures that actually work.</p>
     <div class="cta-row">
       <a href="#services" class="btn-primary">Explore Services</a>
@@ -721,15 +710,14 @@
   </div>
 </section>
 
+<!-- OPTION B: footer with specialist tagline -->
 <footer>
   <span>© 2026 bait.name</span>
-  <span>XSOAR SOLUTIONS · CYBER SECURITY</span>
+  <span class="footer-tagline">XSOAR Specialist · Cyber Security</span>
 </footer>
 
 <script>
-  // Animate timeline items on scroll
   const items = document.querySelectorAll('.timeline-item');
-
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -739,10 +727,8 @@
       }
     });
   }, { threshold: 0.2 });
-
   items.forEach(item => observer.observe(item));
 
-  // Smooth scroll
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
       e.preventDefault();
