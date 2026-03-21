@@ -1064,14 +1064,14 @@
     document.getElementById('contactDefault').style.display = 'none';
     document.getElementById('contactThankyou').style.display = 'none';
     document.getElementById('contactForm').style.display = 'block';
-    document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+    window.scrollTo({ top: document.getElementById('contact').offsetTop - 80, behavior: 'smooth' });
   }
 
   function showDefaultContact() {
     document.getElementById('contactForm').style.display = 'none';
     document.getElementById('contactThankyou').style.display = 'none';
     document.getElementById('contactDefault').style.display = 'grid';
-    document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+    window.scrollTo({ top: document.getElementById('contact').offsetTop - 80, behavior: 'smooth' });
   }
 
   const discoveryForm = document.getElementById('discoveryForm');
@@ -1090,7 +1090,7 @@
         if (res.ok) {
           document.getElementById('contactForm').style.display = 'none';
           document.getElementById('contactThankyou').style.display = 'block';
-          document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+          window.scrollTo({ top: document.getElementById('contact').offsetTop - 80, behavior: 'smooth' });
         } else {
           btn.textContent = 'Submit Discovery →';
           btn.disabled = false;
@@ -1105,4 +1105,16 @@
   }
 
   document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListen
+    a.addEventListener('click', function(e) {
+      const href = this.getAttribute('href');
+      if (href === '#' || href === '#contact') return;
+      const target = document.querySelector(href);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+</body>
+</html>
