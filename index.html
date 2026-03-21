@@ -466,6 +466,108 @@
   .contact-link:hover { border-color: var(--accent); color: var(--accent); background: rgba(0,229,255,0.04); }
   .contact-link .icon { display: flex; align-items: center; flex-shrink: 0; }
 
+  /* DISCOVERY FORM */
+  .discovery-form-wrap {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    padding: 3rem;
+  }
+
+  .form-section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .form-row-two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+  }
+
+  .form-field label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
+  }
+
+  .req { color: var(--accent2); }
+
+  .form-field input,
+  .form-field textarea,
+  .form-field select {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.75rem 1rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    outline: none;
+    transition: border-color 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .form-field input:focus,
+  .form-field textarea:focus,
+  .form-field select:focus { border-color: var(--accent); }
+
+  .form-field input::placeholder,
+  .form-field textarea::placeholder { color: var(--muted); opacity: 0.6; }
+
+  .form-field textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+
+  .form-field select { cursor: pointer; color: var(--text); }
+  .form-field select option { background: var(--surface); }
+
+  .form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+
+  /* THANK YOU */
+  .thankyou-block {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    padding: 4rem 3rem;
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .thankyou-icon {
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* FORM MOBILE */
+  @media (max-width: 768px) {
+    .discovery-form-wrap { padding: 2rem 1.5rem; }
+    .form-row-two { grid-template-columns: 1fr; }
+    .form-actions { flex-direction: column; }
+    .form-actions .btn-primary,
+    .form-actions .btn-outline { width: 100%; justify-content: center; }
+    .thankyou-block { padding: 3rem 1.5rem; }
+  }
+
   /* FOOTER */
   footer {
     border-top: 1px solid var(--border);
@@ -782,12 +884,14 @@
 <hr class="divider">
 
 <section id="contact">
-  <div class="contact-block">
+
+  <!-- DEFAULT VIEW -->
+  <div class="contact-block" id="contactDefault">
     <div>
       <div class="section-label">// Get Started</div>
       <h2>Ready to Build?</h2>
       <p class="section-intro">Whether you're starting from scratch or enhancing an existing XSOAR deployment, let's scope what's needed.</p>
-      <a href="#contact" class="btn-primary">Start the Conversation</a>
+      <button class="btn-primary" onclick="showDiscoveryForm()">Start Discovery</button>
     </div>
     <div class="contact-links">
       <a href="mailto:hello@bait.name" class="contact-link">
@@ -810,6 +914,111 @@
       </a>
     </div>
   </div>
+
+  <!-- DISCOVERY FORM VIEW -->
+  <div id="contactForm" style="display:none;">
+    <div class="discovery-form-wrap">
+      <div class="section-label">// Start Discovery</div>
+      <h2>Let's Scope Your Project</h2>
+      <p class="section-intro">Fill in as much detail as you can — it helps prepare a meaningful first conversation.</p>
+
+      <form id="discoveryForm" action="https://formspree.io/f/xzdjqvkk" method="POST">
+
+        <div class="form-section-label">Contact Details</div>
+        <div class="form-row-two">
+          <div class="form-field">
+            <label for="f-name">Full Name <span class="req">*</span></label>
+            <input type="text" id="f-name" name="name" required placeholder="Jane Smith">
+          </div>
+          <div class="form-field">
+            <label for="f-email">Email Address <span class="req">*</span></label>
+            <input type="email" id="f-email" name="email" required placeholder="jane@company.com">
+          </div>
+        </div>
+        <div class="form-row-two">
+          <div class="form-field">
+            <label for="f-tel">Telephone Number</label>
+            <input type="tel" id="f-tel" name="telephone" placeholder="+44 7700 000000">
+          </div>
+          <div class="form-field">
+            <label for="f-company">Company Name</label>
+            <input type="text" id="f-company" name="company" placeholder="Acme Security Ltd">
+          </div>
+        </div>
+        <div class="form-row-two">
+          <div class="form-field">
+            <label for="f-role">Job Title / Role</label>
+            <input type="text" id="f-role" name="job_title" placeholder="Security Engineer">
+          </div>
+          <div class="form-field">
+            <label for="f-tz">Country / Timezone</label>
+            <input type="text" id="f-tz" name="country_timezone" placeholder="UK / GMT">
+          </div>
+        </div>
+
+        <div class="form-section-label" style="margin-top:2rem;">Discovery Questions</div>
+        <div class="form-field">
+          <label for="f-usecase">What use case do you need help with? <span class="req">*</span></label>
+          <textarea id="f-usecase" name="use_case" required placeholder="e.g. Automate phishing triage — extract indicators, check against threat intel, notify analyst and close false positives automatically."></textarea>
+        </div>
+        <div class="form-field">
+          <label for="f-workflow">What is your current manual workflow?</label>
+          <textarea id="f-workflow" name="manual_workflow" placeholder="e.g. Analyst receives alert in email, manually checks VirusTotal, opens ticket in ServiceNow, escalates if malicious."></textarea>
+        </div>
+        <div class="form-field">
+          <label for="f-existing">Have you started any XSOAR work for this use case?</label>
+          <textarea id="f-existing" name="existing_xsoar_work" placeholder="e.g. We have a basic playbook started but no integrations configured yet."></textarea>
+        </div>
+        <div class="form-row-two">
+          <div class="form-field">
+            <label for="f-xsoar">XSOAR Version / Deployment Type</label>
+            <input type="text" id="f-xsoar" name="xsoar_version" placeholder="e.g. XSOAR 8 Cloud / On-prem 6.x">
+          </div>
+          <div class="form-field">
+            <label for="f-tenant">Do you have a development tenant available?</label>
+            <select id="f-tenant" name="dev_tenant">
+              <option value="">Select…</option>
+              <option value="Yes — ready to use">Yes — ready to use</option>
+              <option value="Yes — needs provisioning">Yes — needs provisioning</option>
+              <option value="No — need guidance">No — need guidance</option>
+              <option value="Not sure">Not sure</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="f-stack">What integrations / tools are in your stack?</label>
+          <textarea id="f-stack" name="tool_stack" placeholder="e.g. Splunk SIEM, ServiceNow, CrowdStrike, Palo Alto NGFW, VirusTotal..."></textarea>
+        </div>
+        <div class="form-field">
+          <label for="f-timeline">What is your target go-live timeframe?</label>
+          <input type="text" id="f-timeline" name="go_live_timeframe" placeholder="e.g. Q3 2026 / As soon as possible">
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" id="submitBtn">Submit Discovery &#x2192;</button>
+          <button type="button" class="btn-outline" onclick="showDefaultContact()">&#x2190; Back</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- THANK YOU VIEW -->
+  <div id="contactThankyou" style="display:none;">
+    <div class="thankyou-block">
+      <div class="thankyou-icon">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="22" stroke="#00e5ff" stroke-width="1.5"/>
+          <path d="M14 24L21 31L34 17" stroke="#00e5ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="section-label">// Submitted</div>
+      <h2>Discovery Request Received</h2>
+      <p class="section-intro">Thanks for taking the time to fill this in. I'll review your answers and be in touch within 1&#x2013;2 business days to discuss next steps.</p>
+      <button class="btn-outline" onclick="showDefaultContact()">&#x2190; Back to Contact</button>
+    </div>
+  </div>
+
 </section>
 
 <footer>
@@ -849,6 +1058,50 @@
       });
     }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
     items.forEach(item => observer.observe(item));
+  }
+
+  function showDiscoveryForm() {
+    document.getElementById('contactDefault').style.display = 'none';
+    document.getElementById('contactThankyou').style.display = 'none';
+    document.getElementById('contactForm').style.display = 'block';
+    document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function showDefaultContact() {
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('contactThankyou').style.display = 'none';
+    document.getElementById('contactDefault').style.display = 'grid';
+    document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  const discoveryForm = document.getElementById('discoveryForm');
+  if (discoveryForm) {
+    discoveryForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      btn.textContent = 'Sending…';
+      btn.disabled = true;
+      try {
+        const res = await fetch(discoveryForm.action, {
+          method: 'POST',
+          body: new FormData(discoveryForm),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          document.getElementById('contactForm').style.display = 'none';
+          document.getElementById('contactThankyou').style.display = 'block';
+          document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+        } else {
+          btn.textContent = 'Submit Discovery →';
+          btn.disabled = false;
+          alert('Something went wrong. Please try again or email hello@bait.name directly.');
+        }
+      } catch (err) {
+        btn.textContent = 'Submit Discovery →';
+        btn.disabled = false;
+        alert('Something went wrong. Please try again or email hello@bait.name directly.');
+      }
+    });
   }
 
   document.querySelectorAll('a[href^="#"]').forEach(a => {
